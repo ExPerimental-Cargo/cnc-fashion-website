@@ -44,36 +44,50 @@
     <main>
 
         <!-- ==============================
-             HERO (Scroll-driven CNC animation)
+             HERO
              ============================== -->
-        <section class="hero-scroll" id="hero">
-            <div class="hero-scroll__sticky">
-                <div class="hero__media">
-                    <img src="images/hero-bg.jpg" alt="" class="hero__media-img">
+        <section class="hero" id="hero">
+            <div class="hero__body">
+
+                <!-- Phase 1: CNC Definition -->
+                <div class="hero__cnc" id="heroCNC">
+                    <p class="hero__cnc-line">
+                        <span class="hero__cnc-key">C.</span>
+                        <span class="hero__cnc-word">Connect.</span>
+                    </p>
+                    <p class="hero__cnc-line hero__cnc-line--2">
+                        <span class="hero__cnc-key">N.</span>
+                        <span class="hero__cnc-word">Network.</span>
+                    </p>
+                    <p class="hero__cnc-line hero__cnc-line--3">
+                        <span class="hero__cnc-key">C.</span>
+                        <span class="hero__cnc-word">Creativity-Capital.</span>
+                    </p>
                 </div>
-                <div class="hero__content">
-                    <div class="hero__headline">
-                        <p class="hero__line hero__line--1">
-                            <span class="hero__letter">C</span><span class="hero__expand hero__expand--1">onnect.</span>
-                        </p>
-                        <p class="hero__line hero__line--2">
-                            <span class="hero__letter">N</span><span class="hero__expand hero__expand--2">etwork.</span>
-                        </p>
-                        <p class="hero__line hero__line--3">
-                            <span class="hero__letter">C</span><span class="hero__logo-sub"> FASHION co.</span><span class="hero__expand hero__expand--3">reativity-Capital.</span>
-                        </p>
+
+                <!-- Phase 2: Tagline -->
+                <div class="hero__tag" id="heroTag">
+                    <p>Cross-Border Fashion Business Builder &amp; Venture Partner</p>
+                </div>
+
+                <!-- Phase 3: Brand Summary -->
+                <div class="hero__sum" id="heroSum">
+                    <p class="hero__sum-logo">CNC FASHION co.</p>
+                    <p class="hero__sum-desc">Not Only Bridging Capital and Brand Between Milan and Seoul,<br>We Engineer the Entire Lifecycle of Fashion Assets.</p>
+                    <div class="hero__sum-svcs">
+                        <span>M&amp;A Advisory</span>
+                        <span>Cross-Border Sourcing</span>
+                        <span>Market Commercialization</span>
+                        <span>Global Branding</span>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- ==============================
-             HERO SUBTEXT
-             ============================== -->
-        <section class="hero-subtext">
-            <p class="hero__badge reveal-up">Cross-Border Fashion Business Builder &amp; Venture Partner</p>
-            <p class="hero__desc reveal-up" style="--delay: 0.15s;">Not Only Bridging Capital and Brand Between Milan and Seoul,<br>
-            We Engineer the Entire Lifecycle of Fashion Assets.</p>
+            </div>
+
+            <!-- Scroll cue -->
+            <div class="hero__cue" id="heroCue">
+                <img class="hero__cue-arrow" src="logos/arrow down.svg" alt="">
+            </div>
         </section>
 
         <!-- ==============================
@@ -82,10 +96,8 @@
         <section class="section who-we-are" id="who-we-are">
             <div class="container">
                 <div class="wwa__grid">
-                    <div class="wwa__heading-col">
-                        <h2 class="section-heading reveal-up">WHO WE ARE</h2>
-                    </div>
-                    <div class="wwa__body reveal-up" style="--delay: 0.12s;">
+                    <h2 class="section-heading section-heading--full reveal-up"><span class="heading-clip"><span class="heading-inner">WHO WE ARE</span></span></h2>
+                    <div class="wwa__body reveal-up" style="--delay: 0.55s;">
                         <p class="body-text">CNC는 자본(Capital)의 구조화, 글로벌 네트워크(Connect),
                         그리고 독보적인 크리에이티브(Creativity)를 융합하여 패션 자산의 전
                         라이프사이클을 엔지니어링하는 크로스보더 패션 비즈니스 빌더입니다.
@@ -123,11 +135,11 @@
              ============================== -->
         <section class="section what-we-do" id="what-we-do">
             <div class="container">
-                <h2 class="section-heading section-heading--full reveal-up">WHAT WE DO</h2>
+                <h2 class="section-heading section-heading--full reveal-up"><span class="heading-clip"><span class="heading-inner">WHAT WE DO</span></span></h2>
 
                 <div class="svc-list">
 
-                    <div class="svc reveal-up" style="--delay: 0s;">
+                    <div class="svc reveal-up" style="--delay: 0.52s;">
                         <span class="svc__num">1</span>
                         <div class="svc__content">
                             <h3 class="svc__title">M&amp;A Advisory, Capital Connection &amp;<br>Operating Partner</h3>
@@ -138,7 +150,7 @@
                         </div>
                     </div>
 
-                    <div class="svc reveal-up" style="--delay: 0.08s;">
+                    <div class="svc reveal-up" style="--delay: 0.61s;">
                         <span class="svc__num">2</span>
                         <div class="svc__content">
                             <h3 class="svc__title">Cross-Border Sourcing<br>&amp; Two-Way Market Entry</h3>
@@ -149,7 +161,7 @@
                         </div>
                     </div>
 
-                    <div class="svc reveal-up" style="--delay: 0.16s;">
+                    <div class="svc reveal-up" style="--delay: 0.70s;">
                         <span class="svc__num">3</span>
                         <div class="svc__content">
                             <h3 class="svc__title">Market Commercialization<br>&amp; Business Scaling</h3>
@@ -159,7 +171,7 @@
                         </div>
                     </div>
 
-                    <div class="svc reveal-up" style="--delay: 0.24s;">
+                    <div class="svc reveal-up" style="--delay: 0.79s;">
                         <span class="svc__num">4</span>
                         <div class="svc__content">
                             <h3 class="svc__title">Global Branding with Italian Joint Venture<br>
@@ -188,12 +200,15 @@
              OUR WORKS
              ============================== -->
         <section class="section our-works" id="our-works">
-            <div class="container">
-                <h2 class="section-heading section-heading--full reveal-up">OUR WORKS</h2>
+            <div class="our-works__sticky">
+                <div class="works-edge works-edge--left"  id="worksEdgeLeft"></div>
+                <div class="works-edge works-edge--right" id="worksEdgeRight"></div>
+                <div class="container">
+                <h2 class="section-heading section-heading--full reveal-up"><span class="heading-clip"><span class="heading-inner">OUR WORKS</span></span></h2>
 
-                <div class="works-list">
+                <div class="works-list" id="worksList">
 
-                    <div class="work-cat reveal-up" style="--delay: 0s;">
+                    <div class="work-cat reveal-up" style="--delay: 0.52s;">
                         <div class="work-cat__header">
                             <span class="work-cat__num">1</span>
                             <div class="work-cat__title-group">
@@ -203,29 +218,23 @@
                         </div>
                         <div class="work-cases">
                             <div class="work-case">
-                                <div class="work-case__top">
-                                    <img class="work-case__brand" src="logos/DUVETICA.svg" alt="Duvetica">
-                                    <div class="work-case__meta">
-                                        <span class="work-case__origin">DUVETICA S.r.l. (Italy)</span>
-                                        <span class="work-case__tag">M&amp;A &amp; Rebranding</span>
-                                    </div>
+                                <div class="work-case__meta">
+                                    <span class="work-case__origin">DUVETICA S.r.l. (Italy)</span>
+                                    <span class="work-case__tag">M&amp;A &amp; Rebranding</span>
                                 </div>
                                 <p class="work-case__desc">딜 제안부터 인수 완료, 밀라노 본사에서의 유럽/아시아 글로벌 전략 총괄 및 브랜드 가치 재정립 수행.</p>
                             </div>
                             <div class="work-case">
-                                <div class="work-case__top">
-                                    <img class="work-case__brand" src="logos/maje paris.svg" alt="Maje Paris">
-                                    <div class="work-case__meta">
-                                        <span class="work-case__origin">MAJE (France/Korea)</span>
-                                        <span class="work-case__tag">Licensing &amp; Import</span>
-                                    </div>
+                                <div class="work-case__meta">
+                                    <span class="work-case__origin">MAJE (France/Korea)</span>
+                                    <span class="work-case__tag">Licensing &amp; Import</span>
                                 </div>
                                 <p class="work-case__desc">국내 최초 독점 수입 계약 및 라이선싱 딜 구조화, 로컬라이징을 통한 시장 안착.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="work-cat reveal-up" style="--delay: 0.1s;">
+                    <div class="work-cat reveal-up" style="--delay: 0.61s;">
                         <div class="work-cat__header">
                             <span class="work-cat__num">2</span>
                             <div class="work-cat__title-group">
@@ -235,19 +244,16 @@
                         </div>
                         <div class="work-cases">
                             <div class="work-case">
-                                <div class="work-case__top">
-                                    <img class="work-case__brand" src="logos/Benneton Group.svg" alt="Benetton Group">
-                                    <div class="work-case__meta">
-                                        <span class="work-case__origin">Benetton Group S.r.l. (Sisley HQ, Italy)</span>
-                                        <span class="work-case__tag">Strategic Advisory</span>
-                                    </div>
+                                <div class="work-case__meta">
+                                    <span class="work-case__origin">Benetton Group S.r.l. (Sisley HQ, Italy)</span>
+                                    <span class="work-case__tag">Strategic Advisory</span>
                                 </div>
                                 <p class="work-case__desc">글로벌 디렉터 파트너로서 한-이 마켓 간 브랜딩 정렬 및 마켓 전략 총괄.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="work-cat reveal-up" style="--delay: 0.2s;">
+                    <div class="work-cat reveal-up" style="--delay: 0.70s;">
                         <div class="work-cat__header">
                             <span class="work-cat__num">3</span>
                             <div class="work-cat__title-group">
@@ -258,6 +264,7 @@
                     </div>
 
                 </div>
+                </div>
             </div>
         </section>
 
@@ -266,8 +273,8 @@
              ============================== -->
         <section class="contact-section" id="contact">
             <div class="contact-section__inner">
-                <h2 class="contact-heading reveal-up-light">CONTACT</h2>
-                <div class="contact-body reveal-up-light" style="--delay: 0.2s;">
+                <h2 class="contact-heading reveal-up-light"><span class="heading-clip"><span class="heading-inner">CONTACT</span></span></h2>
+                <div class="contact-body reveal-up-light" style="--delay: 0.55s;">
                     <p class="contact-brand">CNC FASHION co.</p>
                     <div class="contact-details">
                         <div class="contact-links">
@@ -295,6 +302,7 @@
 
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

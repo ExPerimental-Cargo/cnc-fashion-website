@@ -20,7 +20,7 @@
 
 html {
     font-size: 16px;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -31,6 +31,19 @@ body {
     color: var(--dark);
     overflow-x: hidden;
 }
+
+/* Noise texture overlay */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9000;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
 
 a {
     text-decoration: none;
@@ -73,18 +86,10 @@ img, video {
 
     --container: 1560px;
     --pad-x: 20px;
-    --pad-section: 12vw;
+    --pad-section: 15vw;
 
-    /* ── Hero CNC 커스터마이징 ──────────────────────
-       아래 5개 변수만 바꾸면 JS 수정 없이 적용됩니다.
-       --hero-font-*  : clamp 최소/유동/최대 글자 크기
-       --hero-indent-*: 계단 들여쓰기 (em = 글자 크기 비례)
-       ─────────────────────────────────────────── */
-    --hero-font-min:   40px;
-    --hero-font-fluid: 8.33vw;   /* vh 기반 → 뷰포트 높이에서 3줄이 항상 맞음 */
-    --hero-font-max:   180px;
-    --hero-indent-2:   0.65em;  /* C 글자 너비(~0.65em) + 간격 */
-    --hero-indent-3:   1.4em;  /* N 까지의 너비 + 간격 */
+    --hero-indent-2: 2.8em;
+    --hero-indent-3: 6.2em;
 }
 
 /* =============================================
@@ -98,13 +103,6 @@ img, video {
     padding: 0 var(--pad-x);
 }
 
-.hero__media-img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
 
 /* =============================================
    TYPOGRAPHY
@@ -121,7 +119,7 @@ img, video {
 
 
 .section-heading--full {
-    margin-bottom: clamp(48px, 6vw, 80px);
+    margin-bottom: clamp(56px, 7.5vw, 100px);
 }
 
 .body-text {
@@ -147,8 +145,7 @@ img, video {
     padding: 20px;
     background-color: rgba(255, 255, 255, 0);
     opacity: 0;
-    transition: background-color var(--tr-med),
-                border-color var(--tr-med),
+    transition: border-color var(--tr-med),
                 backdrop-filter var(--tr-med),
                 opacity var(--tr-med);
 }
@@ -298,142 +295,253 @@ img, video {
 .mobile-menu__lang:hover { color: var(--dark); }
 
 /* =============================================
-   HERO — SCROLL-DRIVEN CNC ANIMATION
-   =============================================
-   Initial:  C [gap] N [gap] C — 같은 줄
-             (line 2, 3을 translateY로 line 1 위치에 collapse)
-   Scroll:   N → line 2로 하강, 두 번째 C → line 3으로 하강
-             → 자리 잡으면 나머지 단어가 opacity + max-width 전환
+   HERO
    ============================================= */
 
-.hero-scroll {
-    height: 290vh;
+.hero {
     position: relative;
-}
-
-.hero-scroll__sticky {
-    position: sticky;
-    top: 0;
     height: 100vh;
+    min-height: 580px;
+    background-color: transparent;
     display: flex;
     flex-direction: column;
-    padding-bottom: 20px;
-    overflow: visible;
 }
 
-.hero__media {
+.hero__body {
     flex: 1;
-    min-height: 0;
-    width: 100%;
-    overflow: hidden;
-}
-
-.hero__content {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
+    position: relative;
     max-width: var(--container);
     width: 100%;
     margin: 0 auto;
     padding: 0 var(--pad-x);
-}
-
-/* 로고 서브타이틀 — line3 C 바로 뒤 인라인, 스크롤 시 fade out */
-.hero__logo-sub {
-    position: absolute;
-    left: 0; /* JS가 initHeroCNC에서 C 너비만큼 설정 */
-    top: 0;
-    padding-left: 0.25em;
-    font-size: inherit;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: inherit;
-    white-space: nowrap;
-    color: var(--dark);
-    opacity: 1;
-    pointer-events: none;
-    transition: none; /* JS가 직접 opacity 제어 */
-}
-
-/* overflow:hidden + max-height → JS가 줄 분리에 맞춰 조절 */
-.hero__headline {
-    overflow: hidden;
-    /* margin-bottom: 16px; */
-}
-
-.hero__line {
-    font-size: clamp(var(--hero-font-min), var(--hero-font-fluid), var(--hero-font-max));
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: var(--dark);
-    white-space: nowrap;
-    will-change: transform;
-}
-
-.hero__line--1 { margin-left: 0; }
-.hero__line--2 { margin-left: var(--hero-indent-2); }
-.hero__line--3 { margin-left: var(--hero-indent-3); position: relative; }
-
-/* C, N, C — 페이지 로드 시 순차 fade in */
-.hero__letter {
-    display: inline-block;
-    opacity: 0;
-    animation: letter-in 0.65s ease forwards;
-}
-
-.hero__line--1 .hero__letter { animation-delay: 0.15s; }
-.hero__line--2 .hero__letter { animation-delay: 0.38s; }
-.hero__line--3 .hero__letter { animation-delay: 0.60s; }
-
-@keyframes letter-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* 나머지 단어 — clip-path로 좌→우 reveal (overflow:hidden 제거 → descender 클리핑 방지) */
-.hero__expand {
-    display: inline-block;
-    white-space: nowrap;
-    vertical-align: bottom;
-    opacity: 0;
-    clip-path: inset(0 100% -0.5em 0);
-    transition: clip-path 1.05s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.75s ease;
-}
-
-.hero__expand.revealed {
-    clip-path: inset(0 0% -0.5em 0);
-    opacity: 1;
-}
-
-/* badge + desc 래퍼 — absolute로 흐름에서 완전히 분리 */
-.hero-subtext {
-    padding: var(--pad-section) var(--pad-x);
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 16px;
+}
+
+/* All phases sit in the same space */
+.hero__cnc,
+.hero__tag {
+    position: absolute;
+    left: var(--pad-x);
+    right: var(--pad-x);
+}
+
+.hero__sum {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0 var(--pad-x);
+}
+
+/* ── Phase 1: CNC ──────────────────────────── */
+
+.hero__cnc {
+    transition: opacity 0.65s ease, transform 0.75s var(--ease-out);
+}
+
+.hero__cnc.out {
+    opacity: 0;
+    transform: translateY(-36px);
+    pointer-events: none;
+}
+
+.hero__cnc-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.44em;
+    line-height: 1.06;
+}
+
+.hero__cnc-line--2 { padding-left: var(--hero-indent-2); }
+.hero__cnc-line--3 { padding-left: var(--hero-indent-3); }
+
+.hero__cnc-key {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 7vw, 130px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+    white-space: nowrap;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.hero__cnc-key.on {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero__cnc-word {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 7vw, 130px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    color: var(--grey-600);
+    white-space: nowrap;
+    display: inline-block;
+    opacity: 0;
+}
+
+.hero__cnc-cursor {
+    display: inline-block;
+    width: 0.055em;
+    height: 0.78em;
+    background-color: var(--grey-600);
+    margin-left: 0.04em;
+    vertical-align: -0.04em;
+    animation: cursor-blink 0.65s step-end infinite;
+    transition: opacity 0.35s ease;
+}
+
+@keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ── Phase 2: Tagline ──────────────────────── */
+
+.hero__tag {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(14px);
+    transition: opacity 0.8s ease, transform 0.8s var(--ease-out);
+}
+
+.hero__tag.on {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.hero__tag.out {
+    opacity: 0;
+    transform: translateY(-24px);
+    pointer-events: none;
+}
+
+.hero__tag p {
+    font-family: var(--font-sans);
+    font-size: clamp(12px, 2.55vw, 42px);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--dark);
+    line-height: 1.15;
     text-align: center;
 }
 
-.hero__badge {
-    font-size: clamp(16px, 1.46vw, 32px);
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--dark);
+/* ── Phase 3: Brand Summary ─────────────────── */
+
+.hero__sum {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(40px, 3.2vw, 80px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.65s ease;
 }
 
-.hero__desc {
-  padding-top: 60px;
-    font-family: var(--font-serif);
-    font-size: clamp(24px, 2.19vw, 48px);
-    font-weight: 300;
+.hero__sum.on {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hero__sum-logo {
+    font-family: var(--font-sans);
+    font-size: clamp(36px, 9vw, 130px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
     color: var(--dark);
-    letter-spacing: 0.05em;
-    line-height: 1.2;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+}
+
+.hero__sum.on .hero__sum-logo {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero__sum-desc {
+    font-family: var(--font-serif);
+    font-size: clamp(16px, 2.2vw, 24px);
+    font-weight: 300;
+    color: var(--grey-600);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.hero__sum.on .hero__sum-desc {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.32s;
+}
+
+.hero__sum-svcs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 1.2vw, 18px);
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+.hero__sum.on .hero__sum-svcs {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.7s;
+}
+
+.hero__sum-svcs span {
+    font-family: var(--font-sans);
+    font-size: clamp(11px, 1vw, 16px);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey-600);
+    padding: 10px 24px;
+    border: 1px solid var(--grey-500);
+    border-radius: 9999px;
+    white-space: nowrap;
+}
+
+/* ── Scroll Cue ─────────────────────────────── */
+
+.hero__cue {
+    position: absolute;
+    bottom: clamp(24px, 3vw, 44px);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.hero__cue.on { opacity: 1; }
+
+.hero__cue.bob {
+    animation: cue-bob 2.2s ease-in-out infinite;
+}
+
+@keyframes cue-bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(10px); }
+}
+
+.hero__cue-arrow {
+    display: block;
+    width: clamp(36px, 5vw, 72px);
+    height: auto;
 }
 
 /* =============================================
@@ -446,15 +554,20 @@ img, video {
    ============================================= */
 
 .who-we-are {
+    padding-top: var(--pad-section);
     padding-bottom: var(--pad-section);
 }
 
 .wwa__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     padding-bottom: var(--pad-section);
+}
+
+.wwa__body {
+    max-width: 680px;
 }
 
 /* =============================================
@@ -463,10 +576,8 @@ img, video {
 
 .logo-strip {
     overflow: hidden;
-    /* border-top: 1px solid var(--grey-200);
-    border-bottom: 1px solid var(--grey-200); */
-    padding: 18px 0;
-    background-color: var(--white);
+    padding: 120px 0;
+    background-color: transparent;
 }
 
 .logo-strip__track {
@@ -486,7 +597,7 @@ img, video {
 }
 
 /* Per-logo height correction (SVG aspect ratios differ widely) */
-.logo-strip__item[alt="Sisley"]        { height: clamp(24px, 2.8vw, 38px); }
+.logo-strip__item[alt="Sisley"]        { height: clamp(13px, 1.5vw, 18px); }
 .logo-strip__item[alt="Benetton Group"]{ height: clamp(22px, 2.6vw, 36px); }
 .logo-strip__item[alt="Maje Paris"]    { height: clamp(20px, 2.4vw, 32px); }
 .logo-strip__item[alt="Duvetica"]      { height: clamp(13px, 1.6vw, 22px); }
@@ -508,12 +619,11 @@ img, video {
 }
 
 .what-we-do .container {
-  display: grid; 
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
 }
-
-
 
 .svc {
     display: grid;
@@ -612,26 +722,72 @@ img, video {
    ============================================= */
 
 .our-works {
-    padding-bottom: var(--pad-section);
+    /* height는 JS가 동적으로 설정 */
+    padding-bottom: 0;
 }
 
-/* container → .what-we-do .container와 동일한 1fr 1fr 그리드 */
+.our-works__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.works-edge {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(60px, 10vw, 160px);
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.1s ease;
+}
+
+.works-edge--left {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-current, #edecea), transparent);
+    opacity: 0;
+}
+
+.works-edge--right {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-current, #edecea), transparent);
+    opacity: 1;
+}
+
 .our-works .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    display: block;
+    width: 100%;
+}
+
+.our-works .section-heading {
+    margin-bottom: clamp(48px, 6vw, 90px);
+    position: relative;
+    z-index: 11;
 }
 
 .works-list {
-    margin-bottom: clamp(48px, 6vw, 80px);
+    display: flex;
+    gap: clamp(40px, 5vw, 80px);
+    overflow: visible;
+    will-change: transform;
+    padding-bottom: clamp(24px, 3vw, 40px);
+    margin-left: calc(-1 * var(--pad-x));
+    padding-left: var(--pad-x);
 }
 
-/* work-cat → .svc와 동일 (52px num + 1fr content) */
+/* work-cat → 가로 스크롤 카드 */
 .work-cat {
+    min-width: clamp(300px, 36vw, 540px);
+    flex-shrink: 0;
+    scroll-snap-align: start;
     display: grid;
-    grid-template-columns: 52px 1fr;
+    grid-template-columns: 48px 1fr;
     gap: 20px;
-    padding-bottom: 60px;
+    padding-top: 0;
+    padding-bottom: 0;
     align-items: start;
 }
 
@@ -676,32 +832,11 @@ img, video {
     padding-bottom: clamp(16px, 2vw, 24px);
 }
 
-.work-case__top {
-    display: flex;
-    align-items: center;
-    gap: clamp(40px, 2.5vw, 60px);
-    margin-bottom: 10px;
-}
-
-.work-case__brand {
-    height: clamp(22px, 2.6vw, 36px);
-    width: auto;
-    object-fit: contain;
-    display: block;
-    flex-shrink: 0;
-}
-
-/* Per-logo height correction */
-.work-case__brand[alt="Duvetica"]      { height: clamp(20px, 2vw, 40px); }
-.work-case__brand[alt="Maje Paris"]    { height: clamp(32px, 3.6vw, 60px); }
-.work-case__brand[alt="Benetton Group"]{ height: clamp(24px, 2vw, 40px); }
-
 .work-case__meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    flex-shrink: 0;
+    align-items: baseline;
+    gap: clamp(12px, 1.5vw, 24px);
+    margin-bottom: 8px;
 }
 
 .work-case__origin {
@@ -710,7 +845,6 @@ img, video {
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1;
-    text-align: right;
 }
 
 .work-case__tag {
@@ -735,8 +869,8 @@ img, video {
    ============================================= */
 
 .contact-section {
-    background-color: var(--dark);
-    color: var(--white);
+    background-color: transparent;
+    color: var(--dark);
     display: flex;
     flex-direction: column;
     min-height: 80vh;
@@ -753,19 +887,20 @@ img, video {
 }
 
 .contact-heading {
-  font-size: clamp(44px, 5.63vw, 120px);
+    font-size: clamp(44px, 5.63vw, 120px);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.0;
-    color: var(--white);
+    color: var(--dark);
     margin-bottom: clamp(40px, 5vw, 72px);
+    text-align: center;
 }
 
 .contact-brand {
     font-size: clamp(13px, 1.4vw, 18px);
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--white);
+    color: var(--dark);
     margin-bottom: clamp(28px, 3.5vw, 48px);
 }
 
@@ -786,12 +921,12 @@ img, video {
 .contact-links a {
     font-size: clamp(13px, 1.2vw, 16px);
     font-weight: 300;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(10, 10, 10, 0.6);
     letter-spacing: 0.01em;
     transition: color var(--tr-fast);
 }
 
-.contact-links a:hover { color: var(--white); }
+.contact-links a:hover { color: var(--dark); }
 
 .contact-phones {
     display: flex;
@@ -803,19 +938,19 @@ img, video {
     align-items: baseline;
     gap: 10px;
     font-size: clamp(12px, 1.1vw, 15px);
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(10, 10, 10, 0.5);
 }
 
 .contact-phone__cc {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(10, 10, 10, 0.35);
 }
 
 .contact-footer {
     padding: 20px var(--pad-x);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -825,7 +960,41 @@ img, video {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: rgba(255, 255, 255, 0.25);
+    color: rgba(10, 10, 10, 0.3);
+}
+
+/* =============================================
+   HEADING MASK SLIDE REVEAL
+   ============================================= */
+
+.section-heading.reveal-up,
+.section-heading.reveal-up-light,
+.contact-heading.reveal-up-light {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+.what-we-do .section-heading.reveal-up {
+    align-self: start;
+}
+
+/* 클리핑은 heading-clip이 전담 — display 타입에 무관하게 동작 */
+.heading-clip {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+}
+
+.heading-inner {
+    display: block;
+    transform: translateY(112%);
+    transition: transform 1.1s var(--ease-out);
+}
+
+.reveal-up.visible .heading-inner,
+.reveal-up-light.visible .heading-inner {
+    transform: translateY(0);
 }
 
 /* =============================================
@@ -834,9 +1003,9 @@ img, video {
 
 .reveal-up {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1.1s var(--ease-out),
-                transform 1.1s var(--ease-out);
+    transform: translateY(36px);
+    transition: opacity 1.5s var(--ease-out),
+                transform 1.5s var(--ease-out);
     transition-delay: var(--delay, 0s);
 }
 
@@ -852,9 +1021,9 @@ img, video {
 
 .reveal-up-light {
     opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 1.1s var(--ease-out),
-                transform 1.1s var(--ease-out);
+    transform: translateY(28px);
+    transition: opacity 1.4s var(--ease-out),
+                transform 1.4s var(--ease-out);
     transition-delay: var(--delay, 0s);
 }
 
@@ -902,6 +1071,47 @@ img, video {
 
     .nav__menu-btn {
         display: flex;
+    }
+
+    .works-edge { display: none; }
+
+    /* OUR WORKS — sticky 해제, 세로 스택 */
+    .our-works {
+        height: auto !important;
+        padding-bottom: var(--pad-section);
+    }
+
+    .our-works__sticky {
+        position: relative;
+        height: auto;
+        overflow: visible;
+        align-items: flex-start;
+    }
+
+    .works-list {
+        flex-direction: column;
+        gap: clamp(32px, 6vw, 48px);
+        margin-left: 0;
+        padding-left: 0;
+        transform: none !important;
+    }
+
+    .work-cat {
+        min-width: auto;
+        width: 100%;
+        scroll-snap-align: none;
+        grid-template-columns: 28px 1fr;
+    }
+
+    /* Reveal — 모바일에 맞게 축소 */
+    .reveal-up {
+        transform: translateY(20px);
+        transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+    }
+
+    .reveal-up-light {
+        transform: translateY(16px);
+        transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
     }
 
     .svc,
