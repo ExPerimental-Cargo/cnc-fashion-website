@@ -27,7 +27,7 @@ html {
 
 body {
     font-family: 'neue-haas-unica', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--white);
+    background-color: #C2C0FF;
     color: var(--dark);
     overflow-x: hidden;
 }
@@ -142,7 +142,7 @@ img, video {
     right: 0;
     z-index: 1000;
     height: auto;
-    padding: 20px;
+    padding: 20px 0;
     background-color: rgba(255, 255, 255, 0);
     opacity: 0;
     transition: border-color var(--tr-med),
@@ -152,8 +152,8 @@ img, video {
 
 .nav.scrolled {
     opacity: 1;
-    background-color: rgba(237, 236, 234, 0.75);
-    border-bottom-color: var(--grey-200);
+    background-color: rgba(194, 192, 255, 0.75);
+    border-bottom-color: rgba(194, 192, 255, 0.4);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 }
@@ -165,6 +165,7 @@ img, video {
     display: flex;
     align-items: center;
     gap: 32px;
+    padding: 0 var(--pad-x);
 }
 
 .nav__logo {
@@ -250,7 +251,7 @@ img, video {
 .mobile-menu {
     position: fixed;
     inset: 0;
-    background-color: var(--white);
+    background-color: #C2C0FF;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -276,7 +277,7 @@ img, video {
 
 .mobile-menu__links a {
     font-size: clamp(28px, 7vw, 48px);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--dark);
     transition: opacity var(--tr-fast);
@@ -335,13 +336,37 @@ img, video {
 
 /* ── Phase 1: CNC ──────────────────────────── */
 
+.hero__cnc-logo {
+    font-family: var(--font-sans);
+    font-size: clamp(48px, 9vw, 150px);
+    font-weight: 700;
+    color: var(--dark);
+    text-transform: uppercase;
+    padding-bottom: 0.06em;
+    margin-bottom: 0;
+}
+
+.hero__cnc-logo-inner {
+    display: block;
+    letter-spacing: -0.03em;
+    opacity: 0;
+    filter: blur(20px);
+    transition: opacity 1.2s var(--ease-out), filter 1.5s var(--ease-out);
+}
+
+.hero__cnc-logo.on .hero__cnc-logo-inner {
+    opacity: 1;
+    filter: blur(0);
+}
+
 .hero__cnc {
-    transition: opacity 0.65s ease, transform 0.75s var(--ease-out);
+    transition: opacity 0.65s ease, transform 0.75s var(--ease-out), filter 0.65s ease;
 }
 
 .hero__cnc.out {
     opacity: 0;
     transform: translateY(-36px);
+    filter: blur(14px);
     pointer-events: none;
 }
 
@@ -352,12 +377,12 @@ img, video {
     line-height: 1.06;
 }
 
-.hero__cnc-line--2 { padding-left: var(--hero-indent-2); }
-.hero__cnc-line--3 { padding-left: var(--hero-indent-3); }
+.hero__cnc-line--2 { padding-left: 0; }
+.hero__cnc-line--3 { padding-left: 0; }
 
 .hero__cnc-key {
     font-family: var(--font-sans);
-    font-size: clamp(28px, 7vw, 130px);
+    font-size: clamp(20px, 4vw, 72px);
     font-weight: 600;
     letter-spacing: -0.03em;
     color: var(--dark);
@@ -365,23 +390,32 @@ img, video {
     display: inline-block;
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    filter: blur(10px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), filter 0.7s var(--ease-out);
 }
 
 .hero__cnc-key.on {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
 }
 
 .hero__cnc-word {
     font-family: var(--font-sans);
-    font-size: clamp(28px, 7vw, 130px);
-    font-weight: 300;
+    font-size: clamp(20px, 4vw, 72px);
+    font-weight: 600;
     letter-spacing: -0.03em;
-    color: var(--grey-600);
+    color: var(--dark);
     white-space: nowrap;
     display: inline-block;
+    text-transform: uppercase;
     opacity: 0;
+    filter: blur(12px);
+    transition: filter var(--typing-dur, 1.0s) var(--ease-out);
+}
+
+.hero__cnc-word.typing {
+    filter: blur(0);
 }
 
 .hero__cnc-cursor {
@@ -406,18 +440,21 @@ img, video {
     opacity: 0;
     pointer-events: none;
     transform: translateY(14px);
-    transition: opacity 0.8s ease, transform 0.8s var(--ease-out);
+    filter: blur(14px);
+    transition: opacity 0.8s ease, transform 0.8s var(--ease-out), filter 0.9s var(--ease-out);
 }
 
 .hero__tag.on {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    filter: blur(0);
 }
 
 .hero__tag.out {
     opacity: 0;
     transform: translateY(-24px);
+    filter: blur(14px);
     pointer-events: none;
 }
 
@@ -459,30 +496,31 @@ img, video {
     color: var(--dark);
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+    filter: blur(16px);
+    transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out), filter 0.85s var(--ease-out);
 }
 
 .hero__sum.on .hero__sum-logo {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
 }
 
 .hero__sum-desc {
     font-family: var(--font-serif);
     font-size: clamp(16px, 2.2vw, 24px);
     font-weight: 300;
-    color: var(--grey-600);
+    color: var(--dark);
     line-height: 1.5;
     letter-spacing: 0.03em;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    filter: blur(10px);
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out), filter 0.9s var(--ease-out);
 }
 
-.hero__sum.on .hero__sum-desc {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: 0.32s;
+.hero__sum-desc strong {
+    font-weight: 700;
 }
 
 .hero__sum-svcs {
@@ -508,12 +546,16 @@ img, video {
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--grey-600);
-    padding: 10px 24px;
-    border: 1px solid var(--grey-500);
-    border-radius: 9999px;
-    white-space: nowrap;
+    color: var(--dark);
 }
+
+.hero__sum.on .hero__sum-desc {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    transition-delay: 0.32s;
+}
+
 
 /* ── Scroll Cue ─────────────────────────────── */
 
@@ -545,29 +587,96 @@ img, video {
 }
 
 /* =============================================
-   SECTION BASE
+   INTRO RECAP
    ============================================= */
 
+.intro-recap {
+    padding-top: var(--pad-section);
+    padding-bottom: clamp(32px, 6vw, 80px);
+}
+
+.recap__logo {
+    font-family: var(--font-sans);
+    font-size: clamp(28px, 5vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: clamp(20px, 2.8vw, 44px);
+}
+
+.recap__cnc {
+    margin-bottom: clamp(20px, 2.5vw, 40px);
+}
+
+.recap__cnc-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    line-height: 1.08;
+}
+
+.recap__cnc-key {
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 2.6vw, 42px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+    white-space: nowrap;
+}
+
+.recap__cnc-word {
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 2.6vw, 42px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.recap__tagline {
+    font-family: var(--font-sans);
+    font-size: clamp(14px, 1.8vw, 28px);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: var(--grey-600);
+    margin-bottom: clamp(14px, 1.8vw, 28px);
+}
+
+.recap__desc {
+    font-family: var(--font-serif);
+    font-size: clamp(13px, 1.4vw, 20px);
+    font-weight: 300;
+    color: var(--dark);
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    max-width: 860px;
+}
+
+.recap__desc strong {
+    font-weight: 700;
+}
 
 /* =============================================
    WHO WE ARE
    ============================================= */
 
 .who-we-are {
-    padding-top: var(--pad-section);
+    padding-top: clamp(32px, 6vw, 80px);
     padding-bottom: var(--pad-section);
 }
 
 .wwa__grid {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
     padding-bottom: var(--pad-section);
 }
 
 .wwa__body {
-    max-width: 680px;
+    max-width: 720px;
 }
 
 /* =============================================
@@ -619,10 +728,7 @@ img, video {
 }
 
 .what-we-do .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: start;
+    display: block;
 }
 
 .svc {
@@ -633,12 +739,31 @@ img, video {
     align-items: start;
 }
 
+.svc-list {
+  width: 50%;
+}
+
+.svc-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s var(--ease-out),
+                transform 0.9s var(--ease-out);
+    transition-delay: var(--delay, 0s);
+}
+
+.svc-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: var(--delay, 0s);
+}
+
 .svc__num {
     font-size: clamp(20px, 1.88vw, 42px);
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--dark);
     line-height: 1.2;
+    display: block;
 }
 
 .svc__title {
@@ -722,40 +847,17 @@ img, video {
    ============================================= */
 
 .our-works {
-    /* height는 JS가 동적으로 설정 */
-    padding-bottom: 0;
+    padding-bottom: var(--pad-section);
 }
 
 .our-works__sticky {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
+    position: relative;
+    height: auto;
+    overflow: visible;
+    display: block;
 }
 
-.works-edge {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: clamp(60px, 10vw, 160px);
-    pointer-events: none;
-    z-index: 10;
-    transition: opacity 0.1s ease;
-}
-
-.works-edge--left {
-    left: 0;
-    background: linear-gradient(to right, var(--bg-current, #edecea), transparent);
-    opacity: 0;
-}
-
-.works-edge--right {
-    right: 0;
-    background: linear-gradient(to left, var(--bg-current, #edecea), transparent);
-    opacity: 1;
-}
+.works-edge { display: none; }
 
 .our-works .container {
     display: block;
@@ -764,25 +866,19 @@ img, video {
 
 .our-works .section-heading {
     margin-bottom: clamp(48px, 6vw, 90px);
-    position: relative;
-    z-index: 11;
 }
 
 .works-list {
     display: flex;
-    gap: clamp(40px, 5vw, 80px);
-    overflow: visible;
-    will-change: transform;
+    flex-direction: column;
+    gap: clamp(40px, 5vw, 72px);
     padding-bottom: clamp(24px, 3vw, 40px);
-    margin-left: calc(-1 * var(--pad-x));
-    padding-left: var(--pad-x);
 }
 
-/* work-cat → 가로 스크롤 카드 */
 .work-cat {
-    min-width: clamp(300px, 36vw, 540px);
-    flex-shrink: 0;
-    scroll-snap-align: start;
+    min-width: auto;
+    width: 100%;
+    flex-shrink: 1;
     display: grid;
     grid-template-columns: 48px 1fr;
     gap: 20px;
@@ -869,8 +965,8 @@ img, video {
    ============================================= */
 
 .contact-section {
-    background-color: transparent;
-    color: var(--dark);
+    background-color: #130F24;
+    color: #edecea;
     display: flex;
     flex-direction: column;
     min-height: 80vh;
@@ -891,7 +987,7 @@ img, video {
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.0;
-    color: var(--dark);
+    color: #edecea;
     margin-bottom: clamp(40px, 5vw, 72px);
     text-align: center;
 }
@@ -900,7 +996,7 @@ img, video {
     font-size: clamp(13px, 1.4vw, 18px);
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: var(--dark);
+    color: #edecea;
     margin-bottom: clamp(28px, 3.5vw, 48px);
 }
 
@@ -921,12 +1017,12 @@ img, video {
 .contact-links a {
     font-size: clamp(13px, 1.2vw, 16px);
     font-weight: 300;
-    color: rgba(10, 10, 10, 0.6);
+    color: rgba(237, 236, 234, 0.55);
     letter-spacing: 0.01em;
     transition: color var(--tr-fast);
 }
 
-.contact-links a:hover { color: var(--dark); }
+.contact-links a:hover { color: #edecea; }
 
 .contact-phones {
     display: flex;
@@ -938,19 +1034,19 @@ img, video {
     align-items: baseline;
     gap: 10px;
     font-size: clamp(12px, 1.1vw, 15px);
-    color: rgba(10, 10, 10, 0.5);
+    color: rgba(237, 236, 234, 0.5);
 }
 
 .contact-phone__cc {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.1em;
-    color: rgba(10, 10, 10, 0.35);
+    color: rgba(237, 236, 234, 0.35);
 }
 
 .contact-footer {
     padding: 20px var(--pad-x);
-    border-top: 1px solid rgba(10, 10, 10, 0.1);
+    border-top: 1px solid rgba(237, 236, 234, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -960,7 +1056,7 @@ img, video {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: rgba(10, 10, 10, 0.3);
+    color: rgba(237, 236, 234, 0.3);
 }
 
 /* =============================================
@@ -969,7 +1065,8 @@ img, video {
 
 .section-heading.reveal-up,
 .section-heading.reveal-up-light,
-.contact-heading.reveal-up-light {
+.contact-heading.reveal-up-light,
+.recap__logo.reveal-up {
     opacity: 1;
     transform: none;
     transition: none;
@@ -1042,16 +1139,6 @@ img, video {
    ============================================= */
 
 @media (max-width: 1024px) {
-    .wwa__grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .what-we-do .container,
-    .our-works .container {
-        grid-template-columns: 1fr;
-    }
-
     .work-cases {
         margin-top: 8px;
     }
@@ -1071,29 +1158,6 @@ img, video {
 
     .nav__menu-btn {
         display: flex;
-    }
-
-    .works-edge { display: none; }
-
-    /* OUR WORKS — sticky 해제, 세로 스택 */
-    .our-works {
-        height: auto !important;
-        padding-bottom: var(--pad-section);
-    }
-
-    .our-works__sticky {
-        position: relative;
-        height: auto;
-        overflow: visible;
-        align-items: flex-start;
-    }
-
-    .works-list {
-        flex-direction: column;
-        gap: clamp(32px, 6vw, 48px);
-        margin-left: 0;
-        padding-left: 0;
-        transform: none !important;
     }
 
     .work-cat {
@@ -1119,6 +1183,10 @@ img, video {
         grid-template-columns: 20px 1fr;
     }
 
+    .svc-list {
+        width: 100%;
+    }
+
     .work-cases {
         grid-column: 2;
     }
@@ -1131,6 +1199,17 @@ img, video {
 
     .agency-platform {
         flex-direction: column;
+        gap: 8px;
+    }
+
+    .hero__cnc-logo {
+        font-size: calc((100vw - 40px) / 8.3);
+        white-space: nowrap;
+    }
+
+    .hero__sum-svcs {
+        flex-direction: column;
+        align-items: center;
         gap: 8px;
     }
 }

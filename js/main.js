@@ -9,16 +9,22 @@
     const heroCue = document.getElementById('heroCue');
     if (!heroCNC) return;
 
+    const cncLogo = document.getElementById('heroCNCLogo');
     const keys  = heroCNC.querySelectorAll('.hero__cnc-key');
     const words = heroCNC.querySelectorAll('.hero__cnc-word');
+    words.forEach(w => { w.dataset.original = w.textContent.trim(); });
 
     const timers = [];
+    window._introTimers = timers;
     const schedule = (ms, fn) => timers.push(setTimeout(fn, ms));
 
     function typewriter(el, speed) {
         const text = el.textContent.trim();
+        const typingDur = `${(text.length * speed) / 1000}s`;
+        el.style.setProperty('--typing-dur', typingDur);
         el.textContent = '';
         el.style.opacity = '1';
+        el.classList.add('typing');
 
         const cursor = document.createElement('span');
         cursor.className = 'hero__cnc-cursor';
@@ -37,23 +43,26 @@
         }, speed);
     }
 
-    // Phase 1: CNC 세 줄 순차 등장
-    schedule(380,  () => keys[0].classList.add('on'));
-    schedule(980,  () => typewriter(words[0], 62));
-    schedule(1720, () => keys[1].classList.add('on'));
-    schedule(2320, () => typewriter(words[1], 62));
-    schedule(3060, () => keys[2].classList.add('on'));
-    schedule(3700, () => typewriter(words[2], 58));
+    // 로고 클립 reveal
+    schedule(80, () => { if (cncLogo) cncLogo.classList.add('on'); });
+
+    // 로고 완전히 올라온 이후 C/N/C 라인 순차 등장
+    schedule(900,  () => keys[0].classList.add('on'));
+    schedule(1500, () => typewriter(words[0], 62));
+    schedule(2240, () => keys[1].classList.add('on'));
+    schedule(2840, () => typewriter(words[1], 62));
+    schedule(3580, () => keys[2].classList.add('on'));
+    schedule(4220, () => typewriter(words[2], 58));
 
     // Phase 2: 태그라인 등장
-    schedule(5500, () => heroCNC.classList.add('out'));
-    schedule(5900, () => { if (heroTag) heroTag.classList.add('on'); });
+    schedule(6100, () => heroCNC.classList.add('out'));
+    schedule(6500, () => { if (heroTag) heroTag.classList.add('on'); });
 
     // Phase 3: 브랜드 서머리
-    schedule(8200, () => { if (heroTag) heroTag.classList.add('out'); });
-    schedule(8800, () => { if (heroSum) heroSum.classList.add('on'); });
-    schedule(10400, () => { if (heroCue) heroCue.classList.add('on'); });
-    schedule(11100, () => { if (heroCue) heroCue.classList.add('bob'); });
+    schedule(8800, () => { if (heroTag) heroTag.classList.add('out'); });
+    schedule(9400, () => { if (heroSum) heroSum.classList.add('on'); });
+    schedule(11000, () => { if (heroCue) heroCue.classList.add('on'); });
+    schedule(11700, () => { if (heroCue) heroCue.classList.add('bob'); });
 
     // 스크롤 시 스크롤 큐 숨김
     window.addEventListener('scroll', function onScrollCue() {
@@ -111,32 +120,11 @@ lenis.on('scroll', () => onScroll());
 
 
 /* =============================================
-   BACKGROUND COLOR — SCROLL INTERPOLATION
-   #edecea → #b5b3ff
-   ============================================= */
-
-const BG_START = [237, 236, 234]; // #edecea
-const BG_END   = [181, 179, 255]; // #b5b3ff
-
-function updateBg() {
-    const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollMax <= 0) return;
-    const t = Math.min(1, window.scrollY / scrollMax);
-    const r = Math.round(BG_START[0] + (BG_END[0] - BG_START[0]) * t);
-    const g = Math.round(BG_START[1] + (BG_END[1] - BG_START[1]) * t);
-    const b = Math.round(BG_START[2] + (BG_END[2] - BG_START[2]) * t);
-    document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
-    if (nav) nav.style.backgroundColor = `rgba(${r},${g},${b},0.75)`;
-    document.documentElement.style.setProperty('--bg-current', `rgb(${r},${g},${b})`);
-}
-
-/* =============================================
    UNIFIED SCROLL HANDLER
    ============================================= */
 
 function onScroll() {
     nav.classList.toggle('scrolled', window.scrollY > 20);
-    updateBg();
 }
 
 /* =============================================
@@ -209,55 +197,75 @@ if (logoTrack) {
 }
 
 /* =============================================
-   OUR WORKS — VERTICAL→HORIZONTAL SCROLL
+   WHAT WE DO — SEQUENTIAL SVC REVEAL
    ============================================= */
 
 (function () {
-    const section = document.querySelector('.our-works');
-    const list    = document.getElementById('worksList');
-    if (!section || !list) return;
+    const svcList = document.querySelector('.svc-list');
+    if (!svcList) return;
 
-    const MOBILE_BP = 768;
-    let cachedMax = 0;
+    const svcs = Array.from(svcList.querySelectorAll('.svc'));
+    const STEP = 0.85; // 항목 간 간격(s)
 
-    const edgeL = document.getElementById('worksEdgeLeft');
-    const edgeR = document.getElementById('worksEdgeRight');
+    const obs = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
 
-    function isMobile() { return window.innerWidth <= MOBILE_BP; }
+        svcs.forEach((svc, i) => {
+            const base = i * STEP;
+            const map = [
+                [svc.querySelector('.svc__num'),        base],
+                [svc.querySelector('.svc__title'),      base],
+                [svc.querySelector('.svc__desc'),       base + 0.30],
+                [svc.querySelector('.svc__media'),      base + 0.52],
+                [svc.querySelector('.agency-platform'), base + 0.66],
+            ];
+            map.forEach(([el, delay]) => {
+                if (!el) return;
+                el.style.setProperty('--delay', `${delay}s`);
+                el.classList.add('visible');
+            });
+        });
 
-    function calcMax() {
-        const cards = list.children;
-        if (cards.length < 2) return list.scrollWidth - list.clientWidth;
-        const prev = list.style.transform;
-        list.style.transform = '';
-        const firstLeft = cards[0].getBoundingClientRect().left;
-        const lastLeft  = cards[cards.length - 1].getBoundingClientRect().left;
-        list.style.transform = prev;
-        return lastLeft - firstLeft;
-    }
+        obs.disconnect();
+    }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
 
-    function setHeight() {
-        if (isMobile()) { section.style.height = ''; return; }
-        cachedMax = calcMax();
-        section.style.height = `calc(100vh + ${cachedMax}px)`;
-    }
+    obs.observe(svcList);
+})();
 
-    function update() {
-        if (isMobile()) { list.style.transform = ''; return; }
-        const top      = section.getBoundingClientRect().top;
-        const progress = Math.max(0, Math.min(1, -top / cachedMax));
-        list.style.transform = `translateX(${-progress * cachedMax}px)`;
+/* =============================================
+   OUR WORKS — SEQUENTIAL REVEAL
+   ============================================= */
 
-        // 양쪽 페이드 opacity: 처음 15% / 마지막 15% 구간에서 부드럽게 전환
-        if (edgeL) edgeL.style.opacity = Math.min(1, progress / 0.25);
-        if (edgeR) edgeR.style.opacity = Math.min(1, (1 - progress) / 0.25);
-    }
+(function () {
+    const worksList = document.getElementById('worksList');
+    if (!worksList) return;
 
-    setHeight();
-    lenis.on('scroll', update);
-    window.addEventListener('resize', () => { setHeight(); update(); });
-    update();
-})()
+    const cats = Array.from(worksList.querySelectorAll('.work-cat'));
+    const STEP = 0.85;
+
+    const obs = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+
+        cats.forEach((cat, i) => {
+            const base = i * STEP;
+            const map = [
+                [cat.querySelector('.work-cat__num'),   base],
+                [cat.querySelector('.work-cat__title'), base],
+                [cat.querySelector('.work-cat__lead'),  base + 0.30],
+                [cat.querySelector('.work-cases'),      base + 0.52],
+            ];
+            map.forEach(([el, delay]) => {
+                if (!el) return;
+                el.style.setProperty('--delay', `${delay}s`);
+                el.classList.add('visible');
+            });
+        });
+
+        obs.disconnect();
+    }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+
+    obs.observe(worksList);
+})();
 
 /* =============================================
    SMOOTH SCROLL — ANCHOR LINKS
@@ -275,3 +283,129 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         window.scrollTo({ top, behavior: 'smooth' });
     });
 });
+
+/* =============================================
+   NAV LOGO — REPLAY INTRO
+   ============================================= */
+
+(function () {
+    const navLogo = document.querySelector('.nav__logo');
+    if (!navLogo) return;
+
+    const heroCNC = document.getElementById('heroCNC');
+    const heroTag = document.getElementById('heroTag');
+    const heroSum = document.getElementById('heroSum');
+    const heroCue = document.getElementById('heroCue');
+    const cncLogo = document.getElementById('heroCNCLogo');
+    if (!heroCNC) return;
+
+    const keys  = heroCNC.querySelectorAll('.hero__cnc-key');
+    const words = heroCNC.querySelectorAll('.hero__cnc-word');
+
+    let replayTimers = [];
+
+    function scheduleR(ms, fn) {
+        replayTimers.push(setTimeout(fn, ms));
+    }
+
+    function typewriterR(el, speed) {
+        const text = el.dataset.original || '';
+        el.style.setProperty('--typing-dur', `${(text.length * speed) / 1000}s`);
+        el.textContent = '';
+        el.style.opacity = '1';
+        el.classList.add('typing');
+        const cursor = document.createElement('span');
+        cursor.className = 'hero__cnc-cursor';
+        el.appendChild(cursor);
+        let i = 0;
+        const id = setInterval(() => {
+            el.insertBefore(document.createTextNode(text[i++]), cursor);
+            if (i >= text.length) {
+                clearInterval(id);
+                setTimeout(() => {
+                    cursor.style.opacity = '0';
+                    setTimeout(() => cursor.remove(), 350);
+                }, 420);
+            }
+        }, speed);
+    }
+
+    function resetHero() {
+        // 초기 로드 타이머 + 이전 리플레이 타이머 모두 취소
+        if (window._introTimers) {
+            window._introTimers.forEach(clearTimeout);
+            window._introTimers.length = 0;
+        }
+        replayTimers.forEach(clearTimeout);
+        replayTimers = [];
+
+        // heroCNC 즉시 숨김
+        heroCNC.classList.remove('out');
+        heroCNC.style.opacity  = '0';
+        heroCNC.style.filter   = '';
+        heroCNC.style.transform = '';
+
+        // 로고 리셋
+        if (cncLogo) cncLogo.classList.remove('on');
+
+        // 키 리셋
+        keys.forEach(k => {
+            k.classList.remove('on');
+            k.style.opacity   = '';
+            k.style.transform = '';
+            k.style.filter    = '';
+        });
+
+        // 단어 리셋
+        words.forEach(w => {
+            w.classList.remove('typing');
+            w.style.opacity = '0';
+            w.style.filter  = '';
+            const cursor = w.querySelector('.hero__cnc-cursor');
+            if (cursor) cursor.remove();
+            w.textContent = w.dataset.original || '';
+        });
+
+        if (heroTag) heroTag.classList.remove('on', 'out');
+        if (heroSum) heroSum.classList.remove('on');
+        if (heroCue) {
+            heroCue.classList.remove('on', 'bob');
+            heroCue.style.opacity      = '';
+            heroCue.style.pointerEvents = '';
+        }
+    }
+
+    function playIntro() {
+        heroCNC.style.opacity = '';
+        window._introTimers = replayTimers;
+
+        scheduleR(80,    () => { if (cncLogo) cncLogo.classList.add('on'); });
+        scheduleR(900,   () => keys[0].classList.add('on'));
+        scheduleR(1500,  () => typewriterR(words[0], 62));
+        scheduleR(2240,  () => keys[1].classList.add('on'));
+        scheduleR(2840,  () => typewriterR(words[1], 62));
+        scheduleR(3580,  () => keys[2].classList.add('on'));
+        scheduleR(4220,  () => typewriterR(words[2], 58));
+        scheduleR(6100,  () => heroCNC.classList.add('out'));
+        scheduleR(6500,  () => { if (heroTag) heroTag.classList.add('on'); });
+        scheduleR(8800,  () => { if (heroTag) heroTag.classList.add('out'); });
+        scheduleR(9400,  () => { if (heroSum)  heroSum.classList.add('on'); });
+        scheduleR(11000, () => { if (heroCue)  heroCue.classList.add('on'); });
+        scheduleR(11700, () => { if (heroCue)  heroCue.classList.add('bob'); });
+    }
+
+    navLogo.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetHero();
+
+        if (window.scrollY < 5) {
+            setTimeout(playIntro, 120);
+        } else {
+            lenis.scrollTo(0, {
+                duration: 3.0,
+                onComplete: () => playIntro(),
+            });
+        }
+    });
+})();
+
