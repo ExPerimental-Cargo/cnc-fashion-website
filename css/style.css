@@ -220,28 +220,29 @@ img, video {
 .nav__menu-btn {
     display: none;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
     margin-left: auto;
+    overflow: visible;
 }
 
 .nav__menu-btn span {
     display: block;
-    width: 20px;
-    height: 1px;
+    width: 22px;
+    height: 1.5px;
     background-color: var(--dark);
     transition: transform var(--tr-med), opacity var(--tr-fast);
 }
 
 .nav__menu-btn.open span:first-child {
-    transform: translateY(6px) rotate(45deg);
+    transform: translateY(3.75px) rotate(45deg);
 }
 
 .nav__menu-btn.open span:last-child {
-    transform: translateY(-6px) rotate(-45deg);
+    transform: translateY(-3.75px) rotate(-45deg);
 }
 
 /* =============================================
@@ -289,7 +290,7 @@ img, video {
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: var(--grey-500);
+    color: var(--grey-600);
     transition: color var(--tr-fast);
 }
 
@@ -342,7 +343,7 @@ img, video {
     font-weight: 700;
     color: var(--dark);
     text-transform: uppercase;
-    padding-bottom: 0.06em;
+    padding-bottom: 0.25em;
     margin-bottom: 0;
 }
 
@@ -360,7 +361,7 @@ img, video {
 }
 
 .hero__cnc {
-    transition: opacity 0.65s ease, transform 0.75s var(--ease-out), filter 0.65s ease;
+    transition: opacity 0.9s ease, transform 1.0s var(--ease-out), filter 0.9s ease;
 }
 
 .hero__cnc.out {
@@ -375,6 +376,11 @@ img, video {
     align-items: baseline;
     gap: 0.44em;
     line-height: 1.06;
+    margin-bottom: 0.75em;
+}
+
+.hero__cnc-line:last-child {
+    margin-bottom: 0;
 }
 
 .hero__cnc-line--2 { padding-left: 0; }
@@ -382,7 +388,7 @@ img, video {
 
 .hero__cnc-key {
     font-family: var(--font-sans);
-    font-size: clamp(20px, 4vw, 72px);
+    font-size: clamp(16px, 2.8vw, 52px);
     font-weight: 600;
     letter-spacing: -0.03em;
     color: var(--dark);
@@ -402,7 +408,7 @@ img, video {
 
 .hero__cnc-word {
     font-family: var(--font-sans);
-    font-size: clamp(20px, 4vw, 72px);
+    font-size: clamp(16px, 2.8vw, 52px);
     font-weight: 600;
     letter-spacing: -0.03em;
     color: var(--dark);
@@ -410,12 +416,6 @@ img, video {
     display: inline-block;
     text-transform: uppercase;
     opacity: 0;
-    filter: blur(12px);
-    transition: filter var(--typing-dur, 1.0s) var(--ease-out);
-}
-
-.hero__cnc-word.typing {
-    filter: blur(0);
 }
 
 .hero__cnc-cursor {
@@ -441,7 +441,7 @@ img, video {
     pointer-events: none;
     transform: translateY(14px);
     filter: blur(14px);
-    transition: opacity 0.8s ease, transform 0.8s var(--ease-out), filter 0.9s var(--ease-out);
+    transition: opacity 1.1s ease, transform 1.1s var(--ease-out), filter 1.2s var(--ease-out);
 }
 
 .hero__tag.on {
@@ -460,7 +460,7 @@ img, video {
 
 .hero__tag p {
     font-family: var(--font-sans);
-    font-size: clamp(12px, 2.55vw, 42px);
+    font-size: clamp(20px, 2.55vw, 42px);
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -479,7 +479,7 @@ img, video {
     gap: clamp(40px, 3.2vw, 80px);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.65s ease;
+    transition: opacity 0.9s ease;
 }
 
 .hero__sum.on {
@@ -507,9 +507,9 @@ img, video {
 }
 
 .hero__sum-desc {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: clamp(16px, 2.2vw, 24px);
-    font-weight: 300;
+    font-weight: 500;
     color: var(--dark);
     line-height: 1.5;
     letter-spacing: 0.03em;
@@ -543,7 +543,7 @@ img, video {
 .hero__sum-svcs span {
     font-family: var(--font-sans);
     font-size: clamp(11px, 1vw, 16px);
-    font-weight: 500;
+    font-weight: 900;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--dark);
@@ -587,79 +587,6 @@ img, video {
 }
 
 /* =============================================
-   INTRO RECAP
-   ============================================= */
-
-.intro-recap {
-    padding-top: var(--pad-section);
-    padding-bottom: clamp(32px, 6vw, 80px);
-}
-
-.recap__logo {
-    font-family: var(--font-sans);
-    font-size: clamp(28px, 5vw, 80px);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    color: var(--dark);
-    margin-bottom: clamp(20px, 2.8vw, 44px);
-}
-
-.recap__cnc {
-    margin-bottom: clamp(20px, 2.5vw, 40px);
-}
-
-.recap__cnc-line {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4em;
-    line-height: 1.08;
-}
-
-.recap__cnc-key {
-    font-family: var(--font-sans);
-    font-size: clamp(16px, 2.6vw, 42px);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--dark);
-    white-space: nowrap;
-}
-
-.recap__cnc-word {
-    font-family: var(--font-sans);
-    font-size: clamp(16px, 2.6vw, 42px);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: var(--dark);
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.recap__tagline {
-    font-family: var(--font-sans);
-    font-size: clamp(14px, 1.8vw, 28px);
-    font-weight: 600;
-    letter-spacing: 0;
-    text-transform: uppercase;
-    color: var(--grey-600);
-    margin-bottom: clamp(14px, 1.8vw, 28px);
-}
-
-.recap__desc {
-    font-family: var(--font-serif);
-    font-size: clamp(13px, 1.4vw, 20px);
-    font-weight: 300;
-    color: var(--dark);
-    line-height: 1.55;
-    letter-spacing: 0.02em;
-    max-width: 860px;
-}
-
-.recap__desc strong {
-    font-weight: 700;
-}
-
-/* =============================================
    WHO WE ARE
    ============================================= */
 
@@ -677,6 +604,15 @@ img, video {
 
 .wwa__body {
     max-width: 720px;
+}
+
+.wwa__subtitle {
+    font-size: clamp(20px, 2.2vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--dark);
+    margin-bottom: clamp(24px, 3vw, 44px);
 }
 
 /* =============================================
@@ -838,7 +774,7 @@ img, video {
 
 .agency-platform__sub {
     font-size: clamp(12px, 1vw, 16px);
-    color: var(--grey-500);
+    color: var(--grey-600);
     letter-spacing: 0.02em;
 }
 
@@ -949,7 +885,7 @@ img, video {
     letter-spacing: 0.06em;
     line-height: 1.2;
     text-transform: uppercase;
-    color: var(--grey-500);
+    color: var(--grey-600);
 }
 
 .work-case__desc {
@@ -965,8 +901,8 @@ img, video {
    ============================================= */
 
 .contact-section {
-    background-color: #130F24;
-    color: #edecea;
+    background-color: transparent;
+    color: var(--dark);
     display: flex;
     flex-direction: column;
     min-height: 80vh;
@@ -987,7 +923,7 @@ img, video {
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.0;
-    color: #edecea;
+    color: var(--dark);
     margin-bottom: clamp(40px, 5vw, 72px);
     text-align: center;
 }
@@ -996,7 +932,7 @@ img, video {
     font-size: clamp(13px, 1.4vw, 18px);
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: #edecea;
+    color: var(--dark);
     margin-bottom: clamp(28px, 3.5vw, 48px);
 }
 
@@ -1017,12 +953,12 @@ img, video {
 .contact-links a {
     font-size: clamp(13px, 1.2vw, 16px);
     font-weight: 300;
-    color: rgba(237, 236, 234, 0.55);
+    color: rgba(10, 10, 10, 0.5);
     letter-spacing: 0.01em;
     transition: color var(--tr-fast);
 }
 
-.contact-links a:hover { color: #edecea; }
+.contact-links a:hover { color: var(--dark); }
 
 .contact-phones {
     display: flex;
@@ -1034,19 +970,19 @@ img, video {
     align-items: baseline;
     gap: 10px;
     font-size: clamp(12px, 1.1vw, 15px);
-    color: rgba(237, 236, 234, 0.5);
+    color: rgba(10, 10, 10, 0.45);
 }
 
 .contact-phone__cc {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.1em;
-    color: rgba(237, 236, 234, 0.35);
+    color: rgba(10, 10, 10, 0.3);
 }
 
 .contact-footer {
     padding: 20px var(--pad-x);
-    border-top: 1px solid rgba(237, 236, 234, 0.1);
+    border-top: 1px solid rgba(10, 10, 10, 0.12);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1056,7 +992,59 @@ img, video {
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.06em;
-    color: rgba(237, 236, 234, 0.3);
+    color: rgba(10, 10, 10, 0.3);
+}
+
+/* =============================================
+   REWIND BUTTON
+   ============================================= */
+
+.rewind-btn {
+    position: absolute;
+    bottom: clamp(20px, 2.5vw, 36px);
+    left: clamp(16px, 2vw, 32px);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 15px 9px 11px;
+    background-color: var(--dark);
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: clamp(10px, 0.7vw, 12px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity 0.45s ease,
+                transform 0.45s var(--ease-out),
+                background-color var(--tr-fast);
+    white-space: nowrap;
+    user-select: none;
+}
+
+.rewind-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.rewind-btn:hover { background-color: #2a2a2a; }
+
+.rewind-btn__icon {
+    font-size: 16px;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.5s var(--ease-out);
+}
+
+.rewind-btn:hover .rewind-btn__icon {
+    transform: rotate(-360deg);
 }
 
 /* =============================================
@@ -1135,6 +1123,62 @@ img, video {
 }
 
 /* =============================================
+   COLOR VARIATION WIDGET (TEMP)
+   ============================================= */
+
+.color-picker {
+    position: fixed;
+    bottom: clamp(20px, 2.5vw, 36px);
+    right: clamp(16px, 2vw, 32px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.07);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 8px 12px;
+    border-radius: 100px;
+}
+
+.color-picker__label {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dark);
+    opacity: 0.4;
+    user-select: none;
+}
+
+.color-picker__swatches {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.color-picker__swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    outline: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.color-picker__swatch:hover {
+    transform: scale(1.18);
+}
+
+.color-picker__swatch.active {
+    border-color: var(--dark);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+/* =============================================
    RESPONSIVE — 1024px
    ============================================= */
 
@@ -1205,6 +1249,7 @@ img, video {
     .hero__cnc-logo {
         font-size: calc((100vw - 40px) / 8.3);
         white-space: nowrap;
+        padding-bottom: 0.5em;
     }
 
     .hero__sum-svcs {

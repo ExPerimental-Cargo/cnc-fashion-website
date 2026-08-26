@@ -47,22 +47,27 @@
     schedule(80, () => { if (cncLogo) cncLogo.classList.add('on'); });
 
     // 로고 완전히 올라온 이후 C/N/C 라인 순차 등장
-    schedule(900,  () => keys[0].classList.add('on'));
-    schedule(1500, () => typewriter(words[0], 62));
-    schedule(2240, () => keys[1].classList.add('on'));
-    schedule(2840, () => typewriter(words[1], 62));
-    schedule(3580, () => keys[2].classList.add('on'));
-    schedule(4220, () => typewriter(words[2], 58));
+    schedule(1100, () => keys[0].classList.add('on'));
+    schedule(1900, () => typewriter(words[0], 100));
+    schedule(3300, () => keys[1].classList.add('on'));
+    schedule(4100, () => typewriter(words[1], 100));
+    schedule(5500, () => keys[2].classList.add('on'));
+    schedule(6300, () => typewriter(words[2], 90));
 
     // Phase 2: 태그라인 등장
-    schedule(6100, () => heroCNC.classList.add('out'));
-    schedule(6500, () => { if (heroTag) heroTag.classList.add('on'); });
+    schedule(9800,  () => heroCNC.classList.add('out'));
+    schedule(10400, () => { if (heroTag) heroTag.classList.add('on'); });
 
     // Phase 3: 브랜드 서머리
-    schedule(8800, () => { if (heroTag) heroTag.classList.add('out'); });
-    schedule(9400, () => { if (heroSum) heroSum.classList.add('on'); });
-    schedule(11000, () => { if (heroCue) heroCue.classList.add('on'); });
-    schedule(11700, () => { if (heroCue) heroCue.classList.add('bob'); });
+    schedule(13300, () => { if (heroTag) heroTag.classList.add('out'); });
+    schedule(14000, () => { if (heroSum) heroSum.classList.add('on'); });
+    schedule(16000, () => { if (heroCue) heroCue.classList.add('on'); });
+    schedule(17000, () => {
+        if (heroCue) heroCue.classList.add('bob');
+        window._introComplete = true;
+        const rewindBtn = document.getElementById('rewindBtn');
+        if (rewindBtn) rewindBtn.classList.add('visible');
+    });
 
     // 스크롤 시 스크롤 큐 숨김
     window.addEventListener('scroll', function onScrollCue() {
@@ -123,8 +128,14 @@ lenis.on('scroll', () => onScroll());
    UNIFIED SCROLL HANDLER
    ============================================= */
 
+let scrollDir = 'down';
+let _lastScrollY = window.scrollY;
+
 function onScroll() {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
+    const y = window.scrollY;
+    if (y !== _lastScrollY) scrollDir = y > _lastScrollY ? 'down' : 'up';
+    _lastScrollY = y;
+    nav.classList.toggle('scrolled', y > 20);
 }
 
 /* =============================================
@@ -205,28 +216,40 @@ if (logoTrack) {
     if (!svcList) return;
 
     const svcs = Array.from(svcList.querySelectorAll('.svc'));
-    const STEP = 0.85; // 항목 간 간격(s)
+    const STEP = 0.85;
+
+    const allSvcEls = svcs.flatMap(svc => [
+        svc.querySelector('.svc__num'),
+        svc.querySelector('.svc__title'),
+        svc.querySelector('.svc__desc'),
+        svc.querySelector('.svc__media'),
+        svc.querySelector('.agency-platform'),
+    ].filter(Boolean));
 
     const obs = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-
-        svcs.forEach((svc, i) => {
-            const base = i * STEP;
-            const map = [
-                [svc.querySelector('.svc__num'),        base],
-                [svc.querySelector('.svc__title'),      base],
-                [svc.querySelector('.svc__desc'),       base + 0.30],
-                [svc.querySelector('.svc__media'),      base + 0.52],
-                [svc.querySelector('.agency-platform'), base + 0.66],
-            ];
-            map.forEach(([el, delay]) => {
-                if (!el) return;
-                el.style.setProperty('--delay', `${delay}s`);
-                el.classList.add('visible');
+        if (entries[0].isIntersecting) {
+            const n = svcs.length;
+            svcs.forEach((svc, i) => {
+                const base = (scrollDir === 'up' ? (n - 1 - i) : i) * STEP;
+                const map = [
+                    [svc.querySelector('.svc__num'),        base],
+                    [svc.querySelector('.svc__title'),      base],
+                    [svc.querySelector('.svc__desc'),       base + 0.30],
+                    [svc.querySelector('.svc__media'),      base + 0.52],
+                    [svc.querySelector('.agency-platform'), base + 0.66],
+                ];
+                map.forEach(([el, delay]) => {
+                    if (!el) return;
+                    el.style.setProperty('--delay', `${delay}s`);
+                    el.classList.add('visible');
+                });
             });
-        });
-
-        obs.disconnect();
+        } else {
+            allSvcEls.forEach(el => {
+                el.style.setProperty('--delay', '0s');
+                el.classList.remove('visible');
+            });
+        }
     }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
 
     obs.observe(svcList);
@@ -243,25 +266,36 @@ if (logoTrack) {
     const cats = Array.from(worksList.querySelectorAll('.work-cat'));
     const STEP = 0.85;
 
+    const allCatEls = cats.flatMap(cat => [
+        cat.querySelector('.work-cat__num'),
+        cat.querySelector('.work-cat__title'),
+        cat.querySelector('.work-cat__lead'),
+        cat.querySelector('.work-cases'),
+    ].filter(Boolean));
+
     const obs = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-
-        cats.forEach((cat, i) => {
-            const base = i * STEP;
-            const map = [
-                [cat.querySelector('.work-cat__num'),   base],
-                [cat.querySelector('.work-cat__title'), base],
-                [cat.querySelector('.work-cat__lead'),  base + 0.30],
-                [cat.querySelector('.work-cases'),      base + 0.52],
-            ];
-            map.forEach(([el, delay]) => {
-                if (!el) return;
-                el.style.setProperty('--delay', `${delay}s`);
-                el.classList.add('visible');
+        if (entries[0].isIntersecting) {
+            const n = cats.length;
+            cats.forEach((cat, i) => {
+                const base = (scrollDir === 'up' ? (n - 1 - i) : i) * STEP;
+                const map = [
+                    [cat.querySelector('.work-cat__num'),   base],
+                    [cat.querySelector('.work-cat__title'), base],
+                    [cat.querySelector('.work-cat__lead'),  base + 0.30],
+                    [cat.querySelector('.work-cases'),      base + 0.52],
+                ];
+                map.forEach(([el, delay]) => {
+                    if (!el) return;
+                    el.style.setProperty('--delay', `${delay}s`);
+                    el.classList.add('visible');
+                });
             });
-        });
-
-        obs.disconnect();
+        } else {
+            allCatEls.forEach(el => {
+                el.style.setProperty('--delay', '0s');
+                el.classList.remove('visible');
+            });
+        }
     }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
 
     obs.observe(worksList);
@@ -270,6 +304,140 @@ if (logoTrack) {
 /* =============================================
    SMOOTH SCROLL — ANCHOR LINKS
    ============================================= */
+
+/* =============================================
+   REWIND BUTTON + SCROLL-UP REPLAY
+   ============================================= */
+
+(function () {
+    const btn = document.getElementById('rewindBtn');
+    if (!btn) return;
+
+    let wasScrolledDown = false;
+
+    function doReplay() {
+        if (!window._introReplay) return;
+        wasScrolledDown = false;
+        window._introReplay.reset();
+        setTimeout(() => window._introReplay.play(), 120);
+    }
+
+    // 애니메이션 완료 후, 스크롤 다운했다가 맨 위로 돌아오면 즉시 재생
+    lenis.on('scroll', () => {
+        if (!window._introComplete) return; // 애니메이션 중 차단
+
+        const sy = window.scrollY;
+        if (sy > 80) wasScrolledDown = true;
+
+        if (sy < 30 && wasScrolledDown) doReplay();
+    });
+
+    btn.addEventListener('click', doReplay);
+})();
+
+/* =============================================
+   COLOR VARIATION WIDGET (TEMP)
+   ============================================= */
+
+(function () {
+    // ── 배경 컬러 배리에이션 — 여기서 수정하세요 ────────────────
+    const BG_VARIANTS = [
+        // 솔리드 컬러: { type: 'solid', color: '#hex' }
+        { type: 'solid',    color: '#b4b4d6' },   // A: 기본 라벤더
+        { type: 'solid',    color: '#9f9ded' },   // B: 웜 오프화이트
+        { type: 'solid',    color: '#98a7f4' },   // C: 세이지 그린
+
+        // 그라데이션: { type: 'gradient', from, [mid,] to, angle, fromStop(%), [midStop([%, %]),] toStop(%) }
+        // angle    — 방향 각도 (0=위→아래, 90=좌→우, 135=대각선 등)
+        // midStop  — 숫자 하나: 단일 지점 / 배열 둘: [시작%, 끝%] → mid 컬러가 그 구간을 유지
+        { type: 'gradient', from: '#6f90e2', mid: '#c2c0ff', to: '#6f90e2', angle: 90, fromStop: -10, midStop: [5, 85], toStop: 105 },  // D (3점, 4분기)
+        { type: 'gradient', from: '#7ba7ff', to: '#b4b4d6', angle: 90, fromStop: -10, toStop: 10 },  // E (2점)
+    ];
+    // ─────────────────────────────────────────────────────────────
+
+    function hexToRgba(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function buildGrad(v, alpha) {
+        const fmt = (color) => alpha != null ? hexToRgba(color, alpha) : color;
+        const stop = (color, pct) => fmt(color) + (pct != null ? ` ${pct}%` : '');
+        const stops = [stop(v.from, v.fromStop)];
+        if (v.mid != null) {
+            if (Array.isArray(v.midStop)) {
+                stops.push(stop(v.mid, v.midStop[0]));
+                stops.push(stop(v.mid, v.midStop[1]));
+            } else {
+                stops.push(stop(v.mid, v.midStop));
+            }
+        }
+        stops.push(stop(v.to, v.toStop));
+        return `linear-gradient(${v.angle}deg, ${stops.join(', ')})`;
+    }
+
+    function updateNav(variant) {
+        let styleEl = document.getElementById('_navBgOverride');
+        if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = '_navBgOverride';
+            document.head.appendChild(styleEl);
+        }
+        if (variant.type === 'solid') {
+            styleEl.textContent =
+                `.nav.scrolled{background-color:${hexToRgba(variant.color, 0.75)}!important;` +
+                `border-bottom-color:${hexToRgba(variant.color, 0.4)}!important}`;
+        } else {
+            styleEl.textContent =
+                `.nav.scrolled{background-color:transparent!important;` +
+                `background-image:${buildGrad(variant, 0.75)}!important;` +
+                `border-bottom-color:${hexToRgba(variant.from, 0.4)}!important}`;
+        }
+    }
+
+    function applyBg(variant) {
+        const body = document.body;
+        const mm = document.getElementById('mobileMenu');
+        if (variant.type === 'solid') {
+            body.style.backgroundImage = '';
+            body.style.backgroundColor = variant.color;
+            if (mm) { mm.style.backgroundImage = ''; mm.style.backgroundColor = variant.color; }
+        } else {
+            const grad = buildGrad(variant);
+            body.style.backgroundColor = 'transparent';
+            body.style.backgroundImage = grad;
+            body.style.backgroundAttachment = 'fixed';
+            if (mm) { mm.style.backgroundImage = grad; mm.style.backgroundColor = ''; }
+        }
+        updateNav(variant);
+    }
+
+    const container = document.getElementById('colorSwatches');
+    if (!container) return;
+
+    BG_VARIANTS.forEach((variant, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'color-picker__swatch' + (i === 0 ? ' active' : '');
+        if (variant.type === 'solid') {
+            btn.style.backgroundColor = variant.color;
+            btn.title = variant.color;
+        } else {
+            btn.style.background = buildGrad(variant);
+            btn.title = variant.mid
+                ? `${variant.from} → ${variant.mid} → ${variant.to}`
+                : `${variant.from} → ${variant.to}`;
+        }
+        btn.addEventListener('click', () => {
+            container.querySelectorAll('.color-picker__swatch')
+                .forEach(s => s.classList.remove('active'));
+            btn.classList.add('active');
+            applyBg(variant);
+        });
+        container.appendChild(btn);
+    });
+})();
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
@@ -373,26 +541,36 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             heroCue.style.opacity      = '';
             heroCue.style.pointerEvents = '';
         }
+        const rewindBtn = document.getElementById('rewindBtn');
+        if (rewindBtn) rewindBtn.classList.remove('visible');
     }
 
     function playIntro() {
         heroCNC.style.opacity = '';
         window._introTimers = replayTimers;
+        window._introComplete = false;
 
         scheduleR(80,    () => { if (cncLogo) cncLogo.classList.add('on'); });
-        scheduleR(900,   () => keys[0].classList.add('on'));
-        scheduleR(1500,  () => typewriterR(words[0], 62));
-        scheduleR(2240,  () => keys[1].classList.add('on'));
-        scheduleR(2840,  () => typewriterR(words[1], 62));
-        scheduleR(3580,  () => keys[2].classList.add('on'));
-        scheduleR(4220,  () => typewriterR(words[2], 58));
-        scheduleR(6100,  () => heroCNC.classList.add('out'));
-        scheduleR(6500,  () => { if (heroTag) heroTag.classList.add('on'); });
-        scheduleR(8800,  () => { if (heroTag) heroTag.classList.add('out'); });
-        scheduleR(9400,  () => { if (heroSum)  heroSum.classList.add('on'); });
-        scheduleR(11000, () => { if (heroCue)  heroCue.classList.add('on'); });
-        scheduleR(11700, () => { if (heroCue)  heroCue.classList.add('bob'); });
+        scheduleR(1100,  () => keys[0].classList.add('on'));
+        scheduleR(1900,  () => typewriterR(words[0], 100));
+        scheduleR(3300,  () => keys[1].classList.add('on'));
+        scheduleR(4100,  () => typewriterR(words[1], 100));
+        scheduleR(5500,  () => keys[2].classList.add('on'));
+        scheduleR(6300,  () => typewriterR(words[2], 90));
+        scheduleR(9800,  () => heroCNC.classList.add('out'));
+        scheduleR(10400, () => { if (heroTag) heroTag.classList.add('on'); });
+        scheduleR(13300, () => { if (heroTag) heroTag.classList.add('out'); });
+        scheduleR(14000, () => { if (heroSum)  heroSum.classList.add('on'); });
+        scheduleR(16000, () => { if (heroCue)  heroCue.classList.add('on'); });
+        scheduleR(17000, () => {
+            if (heroCue) heroCue.classList.add('bob');
+            window._introComplete = true;
+            const rewindBtn = document.getElementById('rewindBtn');
+            if (rewindBtn) rewindBtn.classList.add('visible');
+        });
     }
+
+    window._introReplay = { reset: resetHero, play: playIntro };
 
     navLogo.addEventListener('click', (e) => {
         e.preventDefault();
