@@ -336,108 +336,74 @@ if (logoTrack) {
 })();
 
 /* =============================================
-   COLOR VARIATION WIDGET (TEMP)
+   LANGUAGE TOGGLE
    ============================================= */
 
 (function () {
-    // ── 배경 컬러 배리에이션 — 여기서 수정하세요 ────────────────
-    const BG_VARIANTS = [
-        // 솔리드 컬러: { type: 'solid', color: '#hex' }
-        { type: 'solid',    color: '#b4b4d6' },   // A: 기본 라벤더
-        { type: 'solid',    color: '#9f9ded' },   // B: 웜 오프화이트
-        { type: 'solid',    color: '#98a7f4' },   // C: 세이지 그린
-
-        // 그라데이션: { type: 'gradient', from, [mid,] to, angle, fromStop(%), [midStop([%, %]),] toStop(%) }
-        // angle    — 방향 각도 (0=위→아래, 90=좌→우, 135=대각선 등)
-        // midStop  — 숫자 하나: 단일 지점 / 배열 둘: [시작%, 끝%] → mid 컬러가 그 구간을 유지
-        { type: 'gradient', from: '#6f90e2', mid: '#c2c0ff', to: '#6f90e2', angle: 90, fromStop: -10, midStop: [5, 85], toStop: 105 },  // D (3점, 4분기)
-        { type: 'gradient', from: '#7ba7ff', to: '#b4b4d6', angle: 90, fromStop: -10, toStop: 10 },  // E (2점)
-    ];
-    // ─────────────────────────────────────────────────────────────
-
-    function hexToRgba(hex, alpha) {
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
-        return `rgba(${r},${g},${b},${alpha})`;
-    }
-
-    function buildGrad(v, alpha) {
-        const fmt = (color) => alpha != null ? hexToRgba(color, alpha) : color;
-        const stop = (color, pct) => fmt(color) + (pct != null ? ` ${pct}%` : '');
-        const stops = [stop(v.from, v.fromStop)];
-        if (v.mid != null) {
-            if (Array.isArray(v.midStop)) {
-                stops.push(stop(v.mid, v.midStop[0]));
-                stops.push(stop(v.mid, v.midStop[1]));
-            } else {
-                stops.push(stop(v.mid, v.midStop));
-            }
+    const T = {
+        ko: {
+            'wwa-body':          'CNC는 자본(Capital), 글로벌 네트워크(Connect), 크리에이티브(Creativity)를 결합하여 패션 자산의 전 라이프사이클을 엔지니어링하는 크로스보더 비즈니스 빌더입니다.<br><br>밀라노와 서울을 다이렉트로 연결하는 독자적 인프라를 기반으로, 유망 브랜드 발굴부터 M&amp;A 연결 및 사후 밸류업(Value-up)까지 브랜드와 투자사의 양방향 성장을 실현합니다.',
+            'svc1-desc':         '패션·라이프스타일 산업에 대한 깊은 통찰력을 바탕으로, 독보적 가치를 지닌 우수 브랜드만을 엄선하여 최적의 자본을 연결합니다. 브랜드에는 글로벌 시장 성장을 위한 자금과 실전 경영 파트너십을, 투자자에게는 검증된 Deal과 확실한 기업 가치 상승(Value-up)을 제공합니다.',
+            'svc2-desc':         '브랜드가 한국, 이태리 등 글로벌 신시장으로 안전하게 진입하는 관문(Gateway)이자, 글로벌 프리미엄 자산이 새로운 시장에 안착하는 정교한 교두보 역할을 수행합니다. 시장 간 장벽을 낮추고 양방향(Two-Way) 스케일업 기회를 창출합니다.',
+            'svc3-desc':         '브랜드 고유의 헤리티지와 디렉팅을 보존하면서, 전략적 라이선싱과 현지 핵심 인재 소싱을 통해 실질적인 브랜드 성장을 이끌어냅니다. 감성적 브랜딩에 머물지 않고 체계적인 상업화 구조를 설계하여 지속 가능한 비즈니스 확장을 완성합니다.',
+            'svc4-desc':         '밀라노 현지 조인트 벤처(JV) 인프라를 풀 가동하여 크리에이티브 디렉팅부터 PR, 마케팅, 글로벌 홀세일까지 직접 실행합니다. 단순 자본 투자를 넘어 현지 거점에서 브랜드를 직접 밀착 관리하여 글로벌 탑티어로 끌어올리는 실질적인 밸류업을 실현합니다.',
+            'works1-lead':       '브랜드 발굴, 자본 배치부터 인수 후 통합(PMI)까지 최적의 구조를 설계합니다.',
+            'works1-case1-desc': '인수 브랜드 소싱 및 딜 완료 &amp; 밀라노 현지 글로벌 프리미엄 브랜드로서 현지화 전략, 인재 소싱, 조직 세팅 구조화',
+            'works1-case2-desc': '국내 최초 독점 수입 계약 및 라이선싱 딜 구조화, 로컬라이징을 통한 시장 안착.',
+            'works2-lead':       '밀라노-서울 직통 네트워크를 활용해 브랜드의 최상위 시장 포지셔닝을 완수합니다.',
+            'works2-case1-desc': '글로벌 디렉터 파트너로서 한-이 마켓 간 브랜딩 정렬 및 마켓 전략 총괄.',
+            'works3-lead':       "단순 유통을 넘어, 현지 안착을 위한 독보적인 '현지화(Localization)' 솔루션을 제공합니다.",
+            'works3-case1-desc': '프리미엄 브랜드 포지셔닝을 구축하기 위한 전략적 브랜딩, 크리에이티브 디렉팅 및 마케팅 총괄',
+        },
+        en: {
+            'wwa-body':          'CNC is a cross-border business builder that engineers the full lifecycle of fashion assets by seamlessly integrating Capital, Global Connectivity (Connect), and Creativity. <br><br>Leveraging our proprietary infrastructure connecting Milan and Seoul directly, we drive two-way growth for both brands and investors—ranging from identifying promising brands and facilitating M&As to post-investment value creation.',
+            'svc1-desc':         'Based on deep insights into the fashion and lifestyle industries, we curate high-value brands and connect them with optimal capital. We empower brands with capital and hands-on operational execution for global scaling, while providing investors with vetted deal flow and clear corporate value appreciation.',
+            'svc2-desc':         'We serve as a secure gateway for brands expanding into new global markets including Korea and Italy, and act as a sophisticated foothold for premium global assets to establish a presence in new regions. We eliminate cross-border barriers to unlock seamless, mutual scale-up opportunities.',
+            'svc3-desc':         "While preserving a brand’s distinct heritage and creative direction, we unlock real growth through strategic licensing and key local talent sourcing. Moving beyond emotional branding, we design systematic commercialization models to achieve sustainable business expansion.",
+            'svc4-desc':         'LWe fully mobilize local Joint Venture (JV) infrastructure in Milan to directly execute creative direction, PR, marketing, and global wholesale. Going beyond passive capital investment, we provide close, hands-on management directly from our local hub to elevate brands into top-tier global players.',
+            'works1-lead':       'Designing optimal structures spanning brand sourcing and capital deployment to post-merger integration (PMI).',
+            'works1-case1-desc': 'Sourced the acquisition brand and completed deal execution; structured Milan-based global localization strategy, key talent sourcing, and organizational setup.',
+            'works1-case2-desc': "Structured Korea’s first exclusive import agreement and licensing deal, securing solid market settlement through strategic localization.",
+            'works2-lead':       'Completing top-tier market positioning for brands by utilizing our direct Milan-Seoul network.',
+            'works2-case1-desc': 'Served as a global director partner, overseeing branding alignment and market strategy between the Korean and Italian markets.',
+            'works3-lead':       'Delivering proprietary localization solutions for seamless regional integration that goes far beyond simple distribution.',
+            'works3-case1-desc': 'Directed strategic branding, creative direction, and marketing to position the brand as an Italian premium lifestyle brand.',
         }
-        stops.push(stop(v.to, v.toStop));
-        return `linear-gradient(${v.angle}deg, ${stops.join(', ')})`;
-    }
+    };
 
-    function updateNav(variant) {
-        let styleEl = document.getElementById('_navBgOverride');
-        if (!styleEl) {
-            styleEl = document.createElement('style');
-            styleEl.id = '_navBgOverride';
-            document.head.appendChild(styleEl);
-        }
-        if (variant.type === 'solid') {
-            styleEl.textContent =
-                `.nav.scrolled{background-color:${hexToRgba(variant.color, 0.75)}!important;` +
-                `border-bottom-color:${hexToRgba(variant.color, 0.4)}!important}`;
-        } else {
-            styleEl.textContent =
-                `.nav.scrolled{background-color:transparent!important;` +
-                `background-image:${buildGrad(variant, 0.75)}!important;` +
-                `border-bottom-color:${hexToRgba(variant.from, 0.4)}!important}`;
-        }
-    }
-
-    function applyBg(variant) {
-        const body = document.body;
-        const mm = document.getElementById('mobileMenu');
-        if (variant.type === 'solid') {
-            body.style.backgroundImage = '';
-            body.style.backgroundColor = variant.color;
-            if (mm) { mm.style.backgroundImage = ''; mm.style.backgroundColor = variant.color; }
-        } else {
-            const grad = buildGrad(variant);
-            body.style.backgroundColor = 'transparent';
-            body.style.backgroundImage = grad;
-            body.style.backgroundAttachment = 'fixed';
-            if (mm) { mm.style.backgroundImage = grad; mm.style.backgroundColor = ''; }
-        }
-        updateNav(variant);
-    }
-
-    const container = document.getElementById('colorSwatches');
-    if (!container) return;
-
-    BG_VARIANTS.forEach((variant, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'color-picker__swatch' + (i === 0 ? ' active' : '');
-        if (variant.type === 'solid') {
-            btn.style.backgroundColor = variant.color;
-            btn.title = variant.color;
-        } else {
-            btn.style.background = buildGrad(variant);
-            btn.title = variant.mid
-                ? `${variant.from} → ${variant.mid} → ${variant.to}`
-                : `${variant.from} → ${variant.to}`;
-        }
-        btn.addEventListener('click', () => {
-            container.querySelectorAll('.color-picker__swatch')
-                .forEach(s => s.classList.remove('active'));
-            btn.classList.add('active');
-            applyBg(variant);
+    function applyLang(lang) {
+        document.documentElement.setAttribute('data-lang', lang);
+        document.documentElement.setAttribute('lang', lang === 'ko' ? 'ko' : 'en');
+        localStorage.setItem('cnc-lang', lang);
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (T[lang]?.[key] !== undefined) el.innerHTML = T[lang][key];
         });
-        container.appendChild(btn);
+    }
+
+    function setLang(lang, animate) {
+        if (!animate) { applyLang(lang); return; }
+        const main = document.querySelector('main');
+        main.classList.add('lang-fade');
+        setTimeout(() => {
+            applyLang(lang);
+            main.classList.remove('lang-fade');
+        }, 600);
+    }
+
+    function handleToggle(e) {
+        e.preventDefault();
+        const current = document.documentElement.getAttribute('data-lang') || 'ko';
+        setLang(current === 'ko' ? 'en' : 'ko', true);
+    }
+
+    document.querySelectorAll('.lang-toggle').forEach(el => {
+        el.addEventListener('click', handleToggle);
     });
+
+    setLang(localStorage.getItem('cnc-lang') || 'ko', false);
 })();
+
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
