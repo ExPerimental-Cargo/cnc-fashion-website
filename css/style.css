@@ -72,7 +72,7 @@ img, video {
     --grey-200:   #e2e1df;
     --grey-300:   #c4c4c4;
     --grey-500:   #777777;
-    --grey-600:   #484848;
+    --grey-600:   #333333;
     --dark:       #0a0a0a;
     --dark-soft:  #1a1a1a;
 
@@ -530,9 +530,9 @@ main.lang-fade { opacity: 0; }
 
 .hero__sum-svcs span {
     font-family: var(--font-sans);
-    font-size: clamp(11px, 1vw, 16px);
+    font-size: clamp(14px, 1.4vw, 22px);
     font-weight: 900;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--dark);
     opacity: 0;

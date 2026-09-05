@@ -61,10 +61,12 @@
     // Phase 3: 브랜드 서머리
     schedule(13300, () => { if (heroTag) heroTag.classList.add('out'); });
     schedule(14000, () => { if (heroSum) heroSum.classList.add('on'); });
-    schedule(16000, () => { if (heroCue) heroCue.classList.add('on'); });
-    schedule(17000, () => {
+    schedule(17200, () => { if (heroCue) heroCue.classList.add('on'); });
+    schedule(17800, () => {
         if (heroCue) heroCue.classList.add('bob');
         window._introComplete = true;
+    });
+    schedule(17700, () => {
         const rewindBtn = document.getElementById('rewindBtn');
         if (rewindBtn) rewindBtn.classList.add('visible');
     });
@@ -527,10 +529,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         scheduleR(10400, () => { if (heroTag) heroTag.classList.add('on'); });
         scheduleR(13300, () => { if (heroTag) heroTag.classList.add('out'); });
         scheduleR(14000, () => { if (heroSum)  heroSum.classList.add('on'); });
-        scheduleR(16000, () => { if (heroCue)  heroCue.classList.add('on'); });
-        scheduleR(17000, () => {
+        scheduleR(17200, () => { if (heroCue)  heroCue.classList.add('on'); });
+        scheduleR(17800, () => {
             if (heroCue) heroCue.classList.add('bob');
             window._introComplete = true;
+        });
+        scheduleR(17700, () => {
             const rewindBtn = document.getElementById('rewindBtn');
             if (rewindBtn) rewindBtn.classList.add('visible');
         });
