@@ -62,13 +62,13 @@
     schedule(13300, () => { if (heroTag) heroTag.classList.add('out'); });
     schedule(14000, () => { if (heroSum) heroSum.classList.add('on'); });
     schedule(17200, () => { if (heroCue) heroCue.classList.add('on'); });
-    schedule(17800, () => {
-        if (heroCue) heroCue.classList.add('bob');
-        window._introComplete = true;
-    });
     schedule(17700, () => {
         const rewindBtn = document.getElementById('rewindBtn');
         if (rewindBtn) rewindBtn.classList.add('visible');
+    });
+    schedule(17800, () => {
+        if (heroCue) heroCue.classList.add('bob');
+        window._introComplete = true;
     });
 
     // 스크롤 시 스크롤 큐 숨김
@@ -358,18 +358,18 @@ if (logoTrack) {
             'works3-case1-desc': '프리미엄 브랜드 포지셔닝을 구축하기 위한 전략적 브랜딩, 크리에이티브 디렉팅 및 마케팅 총괄',
         },
         en: {
-            ‘wwa-body’:          ‘CNC is a cross-border business builder that engineers the full lifecycle of fashion assets by seamlessly integrating Capital, Global Connectivity (Connect), and Creativity. <br><br>Leveraging our proprietary infrastructure connecting Milan and Seoul directly, we drive two-way growth for both brands and investors—ranging from target brand sourcing and M&A advisory to post-investment value creation.’,
-            ‘svc1-desc’:         ‘Based on deep insights into the fashion and lifestyle industries, we curate high-value brands and connect them with optimal capital. We empower brands with capital and hands-on operational execution for global scaling, while providing investors with vetted deal flow and clear corporate value creation.’,
-            ‘svc2-desc’:         ‘We serve as a secure gateway for brands expanding into new global markets including Korea and Italy, acting as a strategic foothold for premium global assets to establish a strong presence in new regions. We eliminate cross-border barriers to unlock seamless, mutual scale-up opportunities.’,
-            ‘svc3-desc’:         "While preserving a brand’s distinct heritage and creative direction, we unlock real growth through strategic licensing and key local talent sourcing. Bridging creative vision with commercial excellence, we design systematic operational models to achieve sustainable business expansion.",
-            ‘svc4-desc’:         ‘We fully mobilize local Joint Venture (JV) infrastructure in Milan to directly execute creative direction, PR, marketing, and global wholesale. Going beyond passive capital investment, we provide close, hands-on management directly from our local hub to elevate brands into top-tier global players.’,
-            ‘works1-lead’:       ‘End-to-end deal structuring from brand sourcing and capital deployment to post-merger integration (PMI).’,
-            ‘works1-case1-desc’: ‘Target brand sourcing, deal execution, and Milan-based global localization strategy, talent acquisition, and organizational setup.’,
-            ‘works1-case2-desc’: "Korea’s first exclusive import and licensing deal structure, securing solid market settlement through strategic localization.",
-            ‘works2-lead’:       ‘Top-tier market positioning for brands powered by a direct Milan-Seoul network.’,
-            ‘works2-case1-desc’: ‘Global director partnership for branding alignment and cross-border market strategy between Korea and Italy.’,
-            ‘works3-lead’:       ‘Tailored localization solutions for seamless regional integration far beyond simple distribution.’,
-            ‘works3-case1-desc’: ‘Strategic branding, creative direction, and marketing execution for premium lifestyle market positioning.’,
+            'wwa-body':          'CNC is a cross-border business builder that engineers the full lifecycle of fashion assets by seamlessly integrating Capital, Global Connectivity (Connect), and Creativity. <br><br>Leveraging our proprietary infrastructure connecting Milan and Seoul directly, we drive two-way growth for both brands and investors—ranging from target brand sourcing and M&amp;A advisory to post-investment value creation.',
+            'svc1-desc':         'Based on deep insights into the fashion and lifestyle industries, we curate high-value brands and connect them with optimal capital. We empower brands with capital and hands-on operational execution for global scaling, while providing investors with vetted deal flow and clear corporate value creation.',
+            'svc2-desc':         'We serve as a secure gateway for brands expanding into new global markets including Korea and Italy, acting as a strategic foothold for premium global assets to establish a strong presence in new regions. We eliminate cross-border barriers to unlock seamless, mutual scale-up opportunities.',
+            'svc3-desc':         "While preserving a brand’s distinct heritage and creative direction, we unlock real growth through strategic licensing and key local talent sourcing. Bridging creative vision with commercial excellence, we design systematic operational models to achieve sustainable business expansion.",
+            'svc4-desc':         'We fully mobilize local Joint Venture (JV) infrastructure in Milan to directly execute creative direction, PR, marketing, and global wholesale. Going beyond passive capital investment, we provide close, hands-on management directly from our local hub to elevate brands into top-tier global players.',
+            'works1-lead':       'End-to-end deal structuring from brand sourcing and capital deployment to post-merger integration (PMI).',
+            'works1-case1-desc': 'Target brand sourcing, deal execution, and Milan-based global localization strategy, talent acquisition, and organizational setup.',
+            'works1-case2-desc': "Korea’s first exclusive import and licensing deal structure, securing solid market settlement through strategic localization.",
+            'works2-lead':       'Top-tier market positioning for brands powered by a direct Milan-Seoul network.',
+            'works2-case1-desc': 'Global director partnership for branding alignment and cross-border market strategy between Korea and Italy.',
+            'works3-lead':       'Tailored localization solutions for seamless regional integration far beyond simple distribution.',
+            'works3-case1-desc': 'Strategic branding, creative direction, and marketing execution for premium lifestyle market positioning.',
         }
     };
 
@@ -530,13 +530,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         scheduleR(13300, () => { if (heroTag) heroTag.classList.add('out'); });
         scheduleR(14000, () => { if (heroSum)  heroSum.classList.add('on'); });
         scheduleR(17200, () => { if (heroCue)  heroCue.classList.add('on'); });
-        scheduleR(17800, () => {
-            if (heroCue) heroCue.classList.add('bob');
-            window._introComplete = true;
-        });
         scheduleR(17700, () => {
             const rewindBtn = document.getElementById('rewindBtn');
             if (rewindBtn) rewindBtn.classList.add('visible');
+        });
+        scheduleR(17800, () => {
+            if (heroCue) heroCue.classList.add('bob');
+            window._introComplete = true;
         });
     }
 
